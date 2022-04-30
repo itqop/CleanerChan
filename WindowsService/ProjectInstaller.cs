@@ -14,6 +14,7 @@ namespace WindowsService
         public ProjectInstaller()
         {
             InitializeComponent();
+            
         }
     }
 }

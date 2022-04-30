@@ -39,9 +39,9 @@
             // 
             // serviceInstaller
             // 
-            this.serviceInstaller.Description = "Test Antivirus Service";
-            this.serviceInstaller.DisplayName = "TestService";
-            this.serviceInstaller.ServiceName = "TestService";
+            this.serviceInstaller.Description = "Watchdog";
+            this.serviceInstaller.DisplayName = "TestService1";
+            this.serviceInstaller.ServiceName = "TestService1";
             this.serviceInstaller.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             // 
             // ProjectInstaller

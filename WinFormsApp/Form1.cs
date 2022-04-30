@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.IO.Compression;
 using System.Text.RegularExpressions;
 using System.Collections.Specialized;
+using System.ServiceProcess;
+using System.Diagnostics;
 
 namespace WinFormsApp
 {
@@ -24,6 +26,7 @@ namespace WinFormsApp
         const string myAppName = "CleanerChan";
         bool isCreatedNew;
         string zips = "";
+        bool iss = true;
         private async Task scanAsync(string item)
         {
             string signature = "";
@@ -56,6 +59,10 @@ namespace WinFormsApp
                         break;
                     }
                     exe = true;
+                    while (!iss)
+                    {
+                        Thread.Sleep(200);
+                    }
                     using (var reader = new StreamReader(Path_Signatures))
                     {
                         while (!reader.EndOfStream)
@@ -90,7 +97,7 @@ namespace WinFormsApp
                 }
             }
         }
-
+        
         private void Mover(string item, string Quar_new)
         {
             File.Move(item, QuarInfoPath + Quar_new);
@@ -274,11 +281,24 @@ namespace WinFormsApp
                 string Quar_new = item.Replace(":", ".01").Replace("\\", ".02");
                 Mover(item, Quar_new);
                 Thread.Sleep(100);
+                string str;
+                using (StreamReader sreader = new StreamReader(QuarInfoPath + Quar_new, System.Text.Encoding.GetEncoding(20127)))
+                {
+                    str = sreader.ReadToEnd();
+                }
+                File.Delete(QuarInfoPath + Quar_new);
+
+                using (StreamWriter swriter = new StreamWriter(QuarInfoPath + Quar_new, false, System.Text.Encoding.GetEncoding(20127)))
+                {
+                    str = "0" + Environment.NewLine + str;
+                    swriter.Write(str);
+                }
+                /*
                 FileStream fs;
 
                 try
                 {
-                    fs = new FileStream(item, FileMode.Open, FileAccess.Read);
+                    fs = new FileStream(QuarInfoPath+Quar_new, FileMode.Open, FileAccess.ReadWrite);
                 }
                 catch (Exception ex)
                 {
@@ -286,9 +306,9 @@ namespace WinFormsApp
                 }
                 using (fs)
                 {
-                 
-                }
-                }
+                    fs.Rea
+                }*/
+            }
         }
 
         private async void btn_FullScan_Click(object sender, EventArgs e)
@@ -323,6 +343,7 @@ namespace WinFormsApp
             btn_Play.Enabled = false;
             btn_Stop.Enabled = true;
             btn_Pause.Enabled = true;
+            iss = true;
         }
 
         private void btn_Pause_Click(object sender, EventArgs e)
@@ -330,6 +351,7 @@ namespace WinFormsApp
             btn_Play.Enabled = true;
             btn_Stop.Enabled = true;
             btn_Pause.Enabled = false;
+            iss = false;
         }
 
         private void btn_Stop_Click(object sender, EventArgs e)
@@ -509,9 +531,24 @@ namespace WinFormsApp
             }
             MessageBox.Show("Вирусы удалены");
         }
-
+        ServiceController[] scServices;
         private async void Antimalware_Load(object sender, EventArgs e)
         {
+            
+           
+
+            scServices = ServiceController.GetServices();
+
+            foreach (ServiceController scTemp in scServices)
+            {
+                if ((scTemp.Status == ServiceControllerStatus.Stopped || scTemp.Status == ServiceControllerStatus.StopPending)
+                        && (scTemp.ServiceName == "TestService" || scTemp.ServiceName == "TestService1"))
+                {
+                    scTemp.Start();
+                    //scTemp.WaitForStatus(ServiceControllerStatus.Running);
+                    scTemp.Refresh();
+                }
+            }
             objMutex = new Mutex(true, myAppName, out isCreatedNew);
 
             if (!isCreatedNew)
@@ -569,6 +606,18 @@ namespace WinFormsApp
                     
                 }
                     string Quar_new = item.Replace(":", ".01").Replace("\\", ".02");
+                    string str;
+                    using (StreamReader sreader = new StreamReader(QuarInfoPath + Quar_new, System.Text.Encoding.GetEncoding(20127)))
+                    {
+                        str = sreader.ReadToEnd();
+                    }
+                    File.Delete(QuarInfoPath + Quar_new);
+
+                    using (StreamWriter swriter = new StreamWriter(QuarInfoPath + Quar_new, false, System.Text.Encoding.GetEncoding(20127)))
+                    {
+                        str = str.Substring(3);
+                        swriter.Write(str);
+                    }
                     File.Move(QuarInfoPath + Quar_new ,item);
                     string? line;
                     using (StreamReader reader = new StreamReader(QuarInfoPath + "Logs.txt"))

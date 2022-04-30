@@ -17,6 +17,7 @@ namespace WindowsService
     {
         private bool _cancel;
         private bool _enabled;
+        private const string Pipe = "\\\\.\\pipe\\Pipe";
         public Service()
         {
 

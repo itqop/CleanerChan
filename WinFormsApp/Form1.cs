@@ -105,11 +105,6 @@ namespace WinFormsApp
             }
         }
 
-        private void btn_Results_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private async void btn_Scan_Click(object sender, EventArgs e)
         {
             canWeGo = 0;
@@ -222,7 +217,7 @@ namespace WinFormsApp
             btn_Quarantine.BackColor = System.Drawing.Color.DarkSlateGray;
             panel_Scan.Visible = true;
             panel4.Visible = false;
-            //panel_Quar.Visible = false;
+            panel_Quar.Visible = false;
         }
 
         private void btn_Logs_Click(object sender, EventArgs e)
@@ -232,7 +227,7 @@ namespace WinFormsApp
             btn_Quarantine.BackColor = System.Drawing.Color.DarkSlateGray;
             panel_Scan.Visible = false;
             panel4.Visible = true;
-            //panelQur.Visible = false;
+            panel_Quar.Visible = false;
         }
         private void btn_Quarantine_Click(object sender, EventArgs e)
         {
@@ -241,7 +236,7 @@ namespace WinFormsApp
             btn_Quarantine.BackColor = System.Drawing.Color.ForestGreen;
             panel_Scan.Visible = false;
             panel4.Visible = false;
-            //panelQur.Visible = true;
+            panel_Quar.Visible = true;
         }
 
         private async void btn_FullScan_Click(object sender, EventArgs e)

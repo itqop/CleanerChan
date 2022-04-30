@@ -53,10 +53,15 @@
             this.btn_Delete_Viruses = new System.Windows.Forms.Button();
             this.panel4 = new System.Windows.Forms.Panel();
             this.Journal = new System.Windows.Forms.ListView();
+            this.panel_Quar = new System.Windows.Forms.Panel();
+            this.btn_Del_One = new System.Windows.Forms.Button();
+            this.btn_Recovery = new System.Windows.Forms.Button();
+            this.Quar_Box = new System.Windows.Forms.ListBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel_Scan.SuspendLayout();
             this.panel4.SuspendLayout();
+            this.panel_Quar.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -164,7 +169,7 @@
             this.panel2.Controls.Add(this.label1);
             this.panel2.Controls.Add(this.btn_Svor);
             this.panel2.Controls.Add(this.btn_Close);
-            this.panel2.Location = new System.Drawing.Point(20, 0);
+            this.panel2.Location = new System.Drawing.Point(-2, 0);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(905, 40);
             this.panel2.TabIndex = 8;
@@ -367,12 +372,12 @@
             this.btn_Delete_Viruses.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_Delete_Viruses.Font = new System.Drawing.Font("Segoe Print", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btn_Delete_Viruses.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btn_Delete_Viruses.Location = new System.Drawing.Point(84, 446);
+            this.btn_Delete_Viruses.Location = new System.Drawing.Point(468, 300);
             this.btn_Delete_Viruses.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btn_Delete_Viruses.Name = "btn_Delete_Viruses";
-            this.btn_Delete_Viruses.Size = new System.Drawing.Size(166, 41);
+            this.btn_Delete_Viruses.Size = new System.Drawing.Size(166, 61);
             this.btn_Delete_Viruses.TabIndex = 11;
-            this.btn_Delete_Viruses.Text = "Удалить вирусы";
+            this.btn_Delete_Viruses.Text = "Удалить все вирусы";
             this.btn_Delete_Viruses.UseVisualStyleBackColor = false;
             // 
             // panel4
@@ -393,12 +398,66 @@
             this.Journal.TabIndex = 0;
             this.Journal.UseCompatibleStateImageBehavior = false;
             // 
+            // panel_Quar
+            // 
+            this.panel_Quar.BackColor = System.Drawing.Color.ForestGreen;
+            this.panel_Quar.Controls.Add(this.btn_Del_One);
+            this.panel_Quar.Controls.Add(this.btn_Recovery);
+            this.panel_Quar.Controls.Add(this.Quar_Box);
+            this.panel_Quar.Controls.Add(this.btn_Delete_Viruses);
+            this.panel_Quar.Location = new System.Drawing.Point(213, 37);
+            this.panel_Quar.Name = "panel_Quar";
+            this.panel_Quar.Size = new System.Drawing.Size(691, 385);
+            this.panel_Quar.TabIndex = 13;
+            this.panel_Quar.Visible = false;
+            // 
+            // btn_Del_One
+            // 
+            this.btn_Del_One.BackColor = System.Drawing.Color.DarkGreen;
+            this.btn_Del_One.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btn_Del_One.FlatAppearance.BorderSize = 0;
+            this.btn_Del_One.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_Del_One.Font = new System.Drawing.Font("Segoe Print", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btn_Del_One.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btn_Del_One.Location = new System.Drawing.Point(229, 310);
+            this.btn_Del_One.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btn_Del_One.Name = "btn_Del_One";
+            this.btn_Del_One.Size = new System.Drawing.Size(166, 41);
+            this.btn_Del_One.TabIndex = 13;
+            this.btn_Del_One.Text = "Удалить вирус";
+            this.btn_Del_One.UseVisualStyleBackColor = false;
+            // 
+            // btn_Recovery
+            // 
+            this.btn_Recovery.BackColor = System.Drawing.Color.DarkGreen;
+            this.btn_Recovery.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btn_Recovery.FlatAppearance.BorderSize = 0;
+            this.btn_Recovery.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_Recovery.Font = new System.Drawing.Font("Segoe Print", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btn_Recovery.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btn_Recovery.Location = new System.Drawing.Point(57, 310);
+            this.btn_Recovery.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btn_Recovery.Name = "btn_Recovery";
+            this.btn_Recovery.Size = new System.Drawing.Size(166, 41);
+            this.btn_Recovery.TabIndex = 12;
+            this.btn_Recovery.Text = "Восстановить";
+            this.btn_Recovery.UseVisualStyleBackColor = false;
+            // 
+            // Quar_Box
+            // 
+            this.Quar_Box.FormattingEnabled = true;
+            this.Quar_Box.ItemHeight = 20;
+            this.Quar_Box.Location = new System.Drawing.Point(34, 37);
+            this.Quar_Box.Name = "Quar_Box";
+            this.Quar_Box.Size = new System.Drawing.Size(616, 244);
+            this.Quar_Box.TabIndex = 0;
+            // 
             // Antimalware
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(946, 511);
-            this.Controls.Add(this.btn_Delete_Viruses);
+            this.ClientSize = new System.Drawing.Size(902, 421);
+            this.Controls.Add(this.panel_Quar);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
@@ -417,6 +476,7 @@
             this.panel_Scan.ResumeLayout(false);
             this.panel_Scan.PerformLayout();
             this.panel4.ResumeLayout(false);
+            this.panel_Quar.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -446,5 +506,9 @@
         private Button btn_Delete_Viruses;
         private Panel panel4;
         private ListView Journal;
+        private Panel panel_Quar;
+        private ListBox Quar_Box;
+        private Button btn_Del_One;
+        private Button btn_Recovery;
     }
 }

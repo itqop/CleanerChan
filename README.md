@@ -1,2 +1,1 @@
-# CleanerChan
-Antimalware project
+# Cleaner

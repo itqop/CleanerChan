@@ -2,6 +2,7 @@ using System.Threading;
 using System.ComponentModel;
 using System.IO.Compression;
 using System.Text.RegularExpressions;
+using System.Collections.Specialized;
 
 namespace WinFormsApp
 {
@@ -14,15 +15,16 @@ namespace WinFormsApp
         }
         int DIR = 0;
         string Viruses = "";
-        string Path_Signatures = "C:\\Users\\leonk\\source\\repos\\Cleaner-main\\WinFormsApp\\bin\\Debug\\net6.0-windows\\34ieiennd2j";
+        string Path_Signatures = "C:\\Users\\leonk\\source\\repos\\CleanerChan\\WinFormsApp\\bin\\Debug\\net6.0-windows\\34ieiennd2j";
         private int x, y;
         private int canWeGo = 0;
         String ResInfoPath = @"Result/Log.txt";
+        String QuarInfoPath = "C:\\Users\\leonk\\source\\repos\\CleanerChan\\WinFormsApp\\bin\\Debug\\net6.0-windows\\Quarantine\\";
         private static Mutex objMutex = null;
-        const string myAppName = "MyFirstSingleMutexApp";
+        const string myAppName = "CleanerChan";
         bool isCreatedNew;
         string zips = "";
-        private void scan(string item)
+        private async Task scanAsync(string item)
         {
             string signature = "";
             FileStream fs;
@@ -64,12 +66,21 @@ namespace WinFormsApp
                                 if (item.StartsWith("temp"))
                                 {
                                     if (!Viruses.Contains(zips)) {
-                                        Viruses += zips + "\n"; 
+                                        Viruses += zips + "\n";
+                                        if (!Quar_Box.Items.Contains(item))
+                                        {
+                                            Quar_Box.Items.Add(zips);
+                                        }
                                     }
                                 }
                                 else
                                 {
                                     Viruses += item + "\n";
+                                    if (!Quar_Box.Items.Contains(item))
+                                    {
+                                        Quar_Box.Items.Add(item);
+                                    }
+                                    
                                 }
                                 All = false;
                             }
@@ -80,8 +91,12 @@ namespace WinFormsApp
             }
         }
 
-      
-
+        private void Mover(string item, string Quar_new)
+        {
+            File.Move(item, QuarInfoPath + Quar_new);
+            //File.Move("C:\\Users\\leonk\\Desktop\\v\\q\\w\\9.exe", "C:\\Users\\leonk\\source\\repos\\CleanerChan\\WinFormsApp\\bin\\Debug\\net6.0-windows\\Quarantine\\9.exe");
+        }
+ 
         private void btn_Explore_Click(object sender, EventArgs e)
         {
             var opd = new OpenFileDialog();
@@ -147,7 +162,7 @@ namespace WinFormsApp
                     ZipChecker(destFile);
                 }
                 else { 
-                    scan(txt_Line.Text);
+                    scanAsync(txt_Line.Text);
                 }
 
                 string dater = DateTime.Now.ToString("g");
@@ -229,7 +244,7 @@ namespace WinFormsApp
             panel4.Visible = true;
             panel_Quar.Visible = false;
         }
-        private void btn_Quarantine_Click(object sender, EventArgs e)
+        private async void btn_Quarantine_Click(object sender, EventArgs e)
         {
             btn_Main.BackColor = System.Drawing.Color.DarkSlateGray;
             btn_Logs.BackColor = System.Drawing.Color.DarkSlateGray;
@@ -237,6 +252,43 @@ namespace WinFormsApp
             panel_Scan.Visible = false;
             panel4.Visible = false;
             panel_Quar.Visible = true;
+            string? line;
+            using (StreamReader reader = new StreamReader(QuarInfoPath + "Logs.txt"))
+            {
+                line = await reader.ReadToEndAsync();
+
+            }
+            foreach (string item in Quar_Box.Items)
+            {
+                if (line.Contains(item)){
+                    continue;
+                }
+                else
+                {
+                    using (StreamWriter writer = new StreamWriter(QuarInfoPath + "Logs.txt", true))
+                    {
+                        await writer.WriteAsync(item + "\n");
+
+                    }
+                }
+                string Quar_new = item.Replace(":", ".01").Replace("\\", ".02");
+                Mover(item, Quar_new);
+                Thread.Sleep(100);
+                FileStream fs;
+
+                try
+                {
+                    fs = new FileStream(item, FileMode.Open, FileAccess.Read);
+                }
+                catch (Exception ex)
+                {
+                    return;
+                }
+                using (fs)
+                {
+                 
+                }
+                }
         }
 
         private async void btn_FullScan_Click(object sender, EventArgs e)
@@ -265,7 +317,6 @@ namespace WinFormsApp
             }
             
         }
-        
 
         private void btn_Play_Click(object sender, EventArgs e)
         {
@@ -280,7 +331,6 @@ namespace WinFormsApp
             btn_Stop.Enabled = true;
             btn_Pause.Enabled = false;
         }
-
 
         private void btn_Stop_Click(object sender, EventArgs e)
         {
@@ -346,7 +396,7 @@ namespace WinFormsApp
                                 File.Copy(item, destFile);
                                 ZipChecker(destFile);
                             }
-                            scan(item);
+                            scanAsync(item);
                             process += step;
                             if ((int)Math.Floor(process) >= progress_Scan.Value)
                             {
@@ -381,7 +431,7 @@ namespace WinFormsApp
                             File.Copy(item, destFile);
                             ZipChecker(destFile);
                         }
-                        scan(item);
+                        scanAsync(item);
                         process += step;
                         if ((int)Math.Floor(process) >= progress_Scan.Value)
                         {
@@ -473,10 +523,22 @@ namespace WinFormsApp
 
             Directory.Delete(temppath, true);
             Directory.CreateDirectory(temppath);
+            string? line;
+            using (StreamReader reader = new StreamReader(QuarInfoPath + "Logs.txt"))
+            {
+                line = await reader.ReadToEndAsync();
+
+            }
+            foreach (string l in line.Split("\n"))
+            {
+                Quar_Box.Items.Add(l);
+            }
+
 
             Journal.View = View.Details;
             Journal.FullRowSelect = true;
             Journal.Columns.Add("Logs", -2);
+
             await ReadResult();
         }
         public async Task ReadResult()
@@ -491,6 +553,72 @@ namespace WinFormsApp
                     Journal.Items.Add(item);
                 }
 
+            }
+        }
+
+        private async void btn_Recovery_Click(object sender, EventArgs e)
+        {
+            if(Quar_Box.SelectedItems.Count != 0)
+            {
+                
+                foreach(string item in Quar_Box.SelectedItems)
+                {
+                    if (Quar_Box.SelectedItem.ToString() == "")
+                {
+                        continue;
+                    
+                }
+                    string Quar_new = item.Replace(":", ".01").Replace("\\", ".02");
+                    File.Move(QuarInfoPath + Quar_new ,item);
+                    string? line;
+                    using (StreamReader reader = new StreamReader(QuarInfoPath + "Logs.txt"))
+                    {
+                        line = await reader.ReadToEndAsync();
+                        line = line.Replace(item + "\n", "");
+
+                    }
+                    Thread.Sleep(100);
+                    using (StreamWriter writer = new StreamWriter(QuarInfoPath + "Logs.txt", false))
+                    {
+                        await writer.WriteAsync(line);
+
+                    }
+                    
+                }
+                Quar_Box.Items.Remove(Quar_Box.SelectedItem);
+            }
+        }
+
+        private async void btn_Del_One_Click(object sender, EventArgs e)
+        {
+            if (Quar_Box.SelectedItems.Count != 0)
+            {
+
+                foreach (string item in Quar_Box.SelectedItems)
+                {
+                    if (Quar_Box.SelectedItem.ToString() == "")
+                    {
+                        continue;
+
+                    }
+                    string Quar_new = item.Replace(":", ".01").Replace("\\", ".02");
+                    File.Move(QuarInfoPath + Quar_new, item);
+                    string? line;
+                    using (StreamReader reader = new StreamReader(QuarInfoPath + "Logs.txt"))
+                    {
+                        line = await reader.ReadToEndAsync();
+                        line = line.Replace(item + "\n", "");
+
+                    }
+                    Thread.Sleep(100);
+                    using (StreamWriter writer = new StreamWriter(QuarInfoPath + "Logs.txt", false))
+                    {
+                        await writer.WriteAsync(line);
+
+                    }
+
+                }
+                Quar_Box.Items.Remove(Quar_Box.SelectedItem);
             }
         }
 
@@ -551,7 +679,7 @@ namespace WinFormsApp
                         File.Delete(fullPath);
                         break;
                     }
-                    scan(fullPath);
+                    scanAsync(fullPath);
                     
 
                 }

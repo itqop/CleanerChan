@@ -426,6 +426,7 @@
             this.btn_Del_One.TabIndex = 13;
             this.btn_Del_One.Text = "Удалить вирус";
             this.btn_Del_One.UseVisualStyleBackColor = false;
+            this.btn_Del_One.Click += new System.EventHandler(this.btn_Del_One_Click);
             // 
             // btn_Recovery
             // 
@@ -442,6 +443,7 @@
             this.btn_Recovery.TabIndex = 12;
             this.btn_Recovery.Text = "Восстановить";
             this.btn_Recovery.UseVisualStyleBackColor = false;
+            this.btn_Recovery.Click += new System.EventHandler(this.btn_Recovery_Click);
             // 
             // Quar_Box
             // 
